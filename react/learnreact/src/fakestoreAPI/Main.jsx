@@ -10,6 +10,9 @@ import NotFound from "./pages/NotFound";
 import Singleproduct from "./pages/Singleproduct";
 import CartProvider from "./contexts/CartContext";
 import Register from "./pages/Register";
+import Profile from "./pages/Profile";
+import AuthProvider from "./contexts/AuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const router = createBrowserRouter([
   {
@@ -30,11 +33,19 @@ const router = createBrowserRouter([
       },
       {
         path: "/wishlist",
-        element: <Wishlist />,
+        element: (
+          <ProtectedRoute>
+            <Wishlist />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/cart",
-        element: <Cart />,
+        element: (
+          <ProtectedRoute>
+            <Cart />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/login",
@@ -49,6 +60,22 @@ const router = createBrowserRouter([
         element: <Singleproduct />,
       },
       {
+        path: "/profile",
+        element: (
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        ),
+      },
+      // {
+      //   path: "/my-orders",
+      //   element: (
+      //     <ProtectedRoute>
+      //       <MyOrders />
+      //     </ProtectedRoute>
+      //   ),
+      // },
+      {
         path: "*",
         element: <NotFound />,
       },
@@ -56,49 +83,13 @@ const router = createBrowserRouter([
   },
 ]);
 
-// const router = createBrowserRouter([
-//   {
-//     path: "/",
-//     element: <First />,
-//     children: [
-//       {
-//         index: true,
-//         element: <Home />,
-//       },
-//       {
-//         path: "/about",
-//         element: <About />,
-//       },
-//       {
-//         path: "/contact",
-//         element: <Contact />,
-//       },
-//       {
-//         path: "/wishlist",
-//         element: <Wishlist />,
-//       },
-//       {
-//         path: "/cart",
-//         element: <Cart />,
-//       },
-//       {
-//         path: "/login",
-//         element: <Login />,
-//       },
-//       {
-//         path: "/product/:id",
-//         element: <Singleproduct />,
-//       },
-//       { path: "*", element: <NotFound /> },
-//     ],
-//   },
-// ]);
-
 function Main() {
   return (
-    <CartProvider>
-      <RouterProvider router={router} />
-    </CartProvider>
+    <AuthProvider>
+      <CartProvider>
+        <RouterProvider router={router} />
+      </CartProvider>
+    </AuthProvider>
   );
 }
 
